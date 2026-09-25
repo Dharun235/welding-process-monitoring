@@ -1,14 +1,31 @@
 # Image analysis
 
-Frame-level feature extraction for welding-process monitoring.
+Computer-vision stage of the welding-process monitoring thesis. It converts welding videos or frame sequences into geometric, physical, and quality-related time-series features.
 
-## What it does
+## Pipeline
 
-- reads `.avi`, `.jpg`, `.jpeg`, and `.png` inputs;
-- detects wire geometry, weld pool, base metal, arc/plasma features, droplets, and spatters;
-- tracks frame-level detections;
-- assigns deterministic anomaly scores;
-- writes detection, tracking, anomaly, and optional visualization outputs.
+```text
+video / frames
+      ↓
+preprocessing → wire / weld-pool / arc detection
+      ↓
+droplet & spatter detection → tracking → anomaly scoring
+      ↓
+CSV features + optional annotated images and plots
+```
+
+## Components
+
+| Component | Purpose |
+| --- | --- |
+| `scripts/preprocessing/` | Frame extraction, glare removal, and image preparation |
+| `scripts/wire/` | Wire edges, contour, tip, tapering, and tool-transition features |
+| `scripts/weldpool/` | Base-metal and weld-pool localization |
+| `scripts/preprocessing/backlit/` | Backlit arc and wire processing |
+| `scripts/preprocessing/laserlit/` | Laserlit wire processing |
+| `scripts/droplets_spatters/` | Droplet/spatter detection, visualization, and tracking |
+| `scripts/anomaly/` | Deterministic anomaly scoring |
+| `scripts/pipeline/` | End-to-end orchestration and result export |
 
 ## Run
 
@@ -19,22 +36,26 @@ cd image_analysis_app
 python -m scripts.pipeline.main
 ```
 
-Configure paths and detector behavior in `scripts/config.py`. `video_mode = None` detects `backlit` or `laserlit` from the input path; set it explicitly to override detection. Debug image outputs are disabled by default to keep runs small.
+Set paths and runtime behavior in `scripts/config.py`:
 
-## Input convention
+- `input_root` — videos or frame folders;
+- `output_root` — generated CSVs, images, and plots;
+- `run.video_mode` — `None` for folder-based `backlit`/`laserlit` detection, or an explicit mode;
+- frame range and debug-output switches.
 
-Place source data below `data/`, or point `input_root` to another directory. Folder names containing `backlit` or `laserlit` select the corresponding detector when automatic mode is enabled.
+## Inputs and outputs
 
-## Output convention
+Supported inputs: `.avi`, `.jpg`, `.jpeg`, and `.png`. Place inputs below `data/`, or set `input_root` to another location.
 
-The pipeline writes below `output_root`:
+The pipeline writes:
 
 ```text
-detect/{csv,images}/
-track/{csv,images,trajectory_plots,velocity_plots}/
-anomaly/{csv,images}/
+output_root/
+├── detect/{csv,images}/
+├── track/{csv,images,trajectory_plots,velocity_plots}/
+└── anomaly/{csv,images}/
 ```
 
-ESAB source data is intentionally not included in this repository. The full research workflow and access limitations are documented in the [root README](../README.md).
+Detection CSVs provide frame-level measurements such as wire-tip position, tapering point, weld-pool position, arc/plasma features, droplets, spatters, and anomaly metadata. These outputs feed `predictive_modeling`.
 
-Droplet/spatter detection and tracking are implemented in `scripts/droplets_spatters/`.
+ESAB videos and process data are not included. See the [root README](../README.md) for access restrictions, thesis context, and the final report.

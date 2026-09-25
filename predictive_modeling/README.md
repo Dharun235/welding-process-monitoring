@@ -1,15 +1,31 @@
 # Predictive modeling
 
-Time-series preparation and model training for welding-process monitoring.
+Time-series preparation and model comparison stage of the welding-process monitoring thesis. It combines process measurements with image-derived features and predicts weld-process quantities over time.
 
 ## Workflow
 
-1. Convert HDF5 process measurements to CSV.
-2. Match measurements with image-analysis and anomaly CSV files.
-3. Align features by time and interpolate short anomaly gaps.
-4. Export raw, clipped, and normalized datasets.
-5. Split sequences without mixing temporal samples across train, validation, and test sets.
-6. Train and compare statistical, machine-learning, and deep-learning models.
+```text
+HDF5 measurements ──> CSV conversion ──┐
+                                       ├──> time-aligned datasets ──> models ──> metrics / plots
+image features ────> anomaly repair ──┘
+```
+
+1. Convert HDF5 measurements to CSV.
+2. Match measurement, detection, and anomaly files by experiment.
+3. Align signals by measurement/frame timestamps.
+4. Interpolate short unreliable feature gaps.
+5. Export raw, clipped, and normalized datasets.
+6. Split sequences into train, validation, and test partitions.
+7. Train and compare model families.
+
+## Model families
+
+| Directory | Models |
+| --- | --- |
+| `scripts/model_training/statistical/` | ARX and bounded NARX system-identification models |
+| `scripts/model_training/ml/` | XGBoost and parallel ensemble models |
+| `scripts/model_training/dl/` | LSTM and neural NARX models |
+| `scripts/utils/` | Correlation plots, summaries, and evaluation helpers |
 
 ## Run
 
@@ -25,24 +41,32 @@ python scripts/model_training/ml/xgb.py
 python scripts/model_training/ml/parallel_ensemble.py
 ```
 
-Edit `scripts/config.py` for input locations, interpolation columns, prediction target, input features, sequence length, and split proportions. Each training script also exposes model-specific options through `--help` where available.
+Use `--help` for script-specific options. Configure shared paths and experiment settings in `scripts/config.py`:
+
+- measurement and image-feature input directories;
+- HDF5 conversion output;
+- interpolation columns and maximum anomaly-gap length;
+- target, history, context, and metadata columns;
+- sequence length, split fractions, and random seed.
 
 ## Data contract
 
 Expected inputs:
 
-- HDF5 process measurements under the configured `h5_input_path`;
+- HDF5 process measurements;
 - detection CSVs from `image_analysis_app`;
 - anomaly CSVs from `image_analysis_app`.
 
-Important configured signals include voltage, current, wire-feed speed, contact-tip-to-work distance, and image-derived distances such as `wiretip_to_weldpool_dist`.
+Important signals include voltage, current, wire-feed speed, contact-tip-to-work distance, and image-derived distances such as `wiretip_to_weldpool_dist`.
 
 ## Outputs
 
-- `output/measurements/` — converted measurement CSVs;
-- `data/merged_org/` — aligned raw data;
-- `data/merged_clipped/` — clipped data;
-- `data/merged_clipped_norm/` — normalized data;
-- `output/predictive_modeling/` — model metrics, predictions, plots, manifests, and feature importance.
+```text
+output/measurements/                 # HDF5 → CSV
+predictive_modeling/data/merged_org/ # aligned raw data
+predictive_modeling/data/merged_clipped/
+predictive_modeling/data/merged_clipped_norm/
+output/predictive_modeling/          # metrics, predictions, plots, manifests
+```
 
-ESAB process data is not included. See the [root README](../README.md) for research context, access restrictions, and the thesis report.
+ESAB measurements and video-derived data are restricted and are not included. See the [root README](../README.md) for the thesis report and repository-use terms.
