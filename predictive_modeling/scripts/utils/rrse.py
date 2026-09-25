@@ -1,20 +1,10 @@
-'''
-    Calculates the Root Relative Squared Error (RRSE) for a prediction model
-'''
+"""Calculate RRSE and Pearson correlation for a prediction CSV."""
+
+from pathlib import Path
+import argparse
 
 import numpy as np
 import pandas as pd
-
-#file_path = r"/home/samuel/Master-Thesis-ESAB/predictive_modeling/output/arx/wiretip_to_weldpool/arx_val_predictions.csv"
-#file_path = r"/home/samuel/Master-Thesis-ESAB/predictive_modeling/output/narx/narx_val_predictions.csv"
-#file_path = r"/home/samuel/Master-Thesis-ESAB/predictive_modeling/output/narx2/narx_validation_predictions.csv"
-#file_path = r"/home/samuel/Master-Thesis-ESAB/predictive_modeling/output/linear/wiretip_to_weldpool/linear_test_predictions.csv"
-file_path = r"/home/samuel/Master-Thesis-ESAB/predictive_modeling/output/narx2/tapering_to_weldpool_specified_inputs_arx_settings/narx2_test_predictions.csv"
-#pred_col = "y_pred_freerun"
-#true_col = "y_true"
-pred_col = "y_pred_freerun"
-true_col = "y_true"
-
 
 def load_prediction_values(file_path, pred_col, true_col):
     df = pd.read_csv(file_path, usecols=[true_col, pred_col])
@@ -43,8 +33,13 @@ def pearson_correlation(file_path, pred_col, true_col):
 
 
 if __name__ == "__main__":
-    rrse_value = rrse(file_path, pred_col, true_col)
-    pearson_value = pearson_correlation(file_path, pred_col, true_col)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("prediction_csv", type=Path)
+    parser.add_argument("--prediction-column", default="y_pred_freerun")
+    parser.add_argument("--target-column", default="y_true")
+    args = parser.parse_args()
+    rrse_value = rrse(args.prediction_csv, args.prediction_column, args.target_column)
+    pearson_value = pearson_correlation(args.prediction_csv, args.prediction_column, args.target_column)
     print(f"RRSE: {rrse_value:.4f}")
     if np.isnan(pearson_value):
         print("Pearson r: n/a")

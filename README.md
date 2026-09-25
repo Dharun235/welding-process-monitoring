@@ -1,248 +1,138 @@
-# Master Thesis ESAB Welding Analysis
+# Welding Process Monitoring
 
-Automated welding video analysis and predictive modeling for process monitoring.
+Research code from a master’s thesis on automated welding-process monitoring with synchronized video and process measurements.
 
-## Features
+The project combines computer-vision feature extraction with time-series modeling. It is organized as two connected stages:
 
-- Extract frames from welding videos.
-- Detect wire, weld pool, base metal, arc, plasma channel, droplets, and spatters.
-- Track droplets and spatters across frames.
-- Score frame-level anomalies with deterministic rules.
-- Convert HDF5 process measurements to CSV.
-- Merge process measurements with image-analysis features.
-- Train ARX, NARX, LSTM, neural NARX, XGBoost, and ensemble models.
-- Export metrics, predictions, feature importance files, and plots.
+1. **Image analysis** extracts geometric, arc, weld-pool, droplet, spatter, and anomaly features from welding videos.
+2. **Predictive modeling** aligns those features with electrical/process measurements and evaluates statistical, machine-learning, and deep-learning models.
 
-## Project Structure
+**Thesis report:** [MasterThesisReport.pdf](https://github.com/Dharun235/dharun.github.io/blob/main/MasterThesisReport.pdf)
+
+## Repository layout
 
 ```text
 .
-+-- README.md
-+-- requirements.txt
-+-- data/
-|   +-- thesis_experiment_matrix.csv
-+-- image_analysis_app/
-|   +-- README.md
-|   +-- scripts/
-|       +-- anomaly/
-|       +-- pipeline/
-|       +-- preprocessing/
-|       +-- weldpool/
-|       +-- wire/
-+-- output/
-|   +-- distribution_analysis/
-|   +-- image_analysis/
-|   +-- predictive_modelling/
-+-- predictive_modeling/
-    +-- README.md
-    +-- scripts/
-        +-- config.py
-        +-- model_training/
-        +-- preprocessing/
-        +-- utils/
+├── image_analysis_app/       # Frame-level detection, tracking, and anomaly scoring
+├── predictive_modeling/      # Measurement conversion, feature alignment, and models
+├── requirements.txt          # Python dependencies
+└── README.md
 ```
+
+Generated data, model outputs, videos, and images are intentionally excluded from this repository. The experimental data used in the thesis is not redistributed here.
+
+## Research workflow
+
+```text
+video / frames ──> image features ──┐
+                                    ├──> aligned datasets ──> model training ──> evaluation
+process HDF5 ──> measurement CSV ──┘
+```
+
+The implemented workflow includes:
+
+- wire, weld-pool, base-metal, arc, plasma-channel, droplet, and spatter feature extraction;
+- deterministic anomaly scoring for unreliable frame-level detections;
+- HDF5-to-CSV conversion and time-based measurement/frame alignment;
+- interpolation, clipping, normalization, and sequence-aware train/validation/test splitting;
+- ARX, NARX, LSTM, neural NARX, XGBoost, and ensemble model scripts;
+- metrics, predictions, split manifests, plots, and feature-importance exports.
 
 ## Requirements
 
-- Python 3.10 or newer.
-- Linux, macOS, or WSL.
-- Welding video data in `.avi`, `.jpg`, `.jpeg`, or `.png` format.
-- Process measurement data in `.h5` format for predictive modeling.
-- Enough disk space for generated frames, CSV files, plots, and model outputs.
+- Python 3.10+
+- OpenCV, NumPy, pandas, SciPy, scikit-learn, XGBoost, PyTorch, h5py, matplotlib, tqdm, and colorama
+- Source welding videos or frame folders
+- HDF5 process measurements for predictive modeling
 
-Main Python packages:
-
-- numpy
-- pandas
-- scipy
-- scikit-learn
-- xgboost
-- h5py
-- matplotlib
-- torch
-- tqdm
-- opencv-python
-- colorama
-
-## Installation
-
-From the repository root:
+## Setup
 
 ```bash
+git clone https://github.com/Dharun235/welding-process-monitoring.git
+cd welding-process-monitoring
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-Use the same virtual environment for both modules.
-
 ## Configuration
 
-Edit these files before a run:
+Defaults are repository-relative. Edit only the relevant configuration file before running a pipeline:
 
-- `image_analysis_app/scripts/config.py`
-  - Set `input_root`.
-  - Set `output_root`.
-  - Set `run.start_img` and `run.end_img` for frame ranges.
-  - Set `run.video_mode` to `backlit`, `laserlit`, or `None` for folder-based detection.
-  - Set CSV and debug-image save options.
+- `image_analysis_app/scripts/config.py` — input/output roots, frame range, acquisition mode, detector thresholds, and debug output.
+- `predictive_modeling/scripts/config.py` — measurement/detection paths, interpolation, target/features, and sequence splitting.
 
-- `predictive_modeling/scripts/config.py`
-  - Set `h5_input_path` for raw process measurements.
-  - Set `h5_output_path` for converted measurement CSV files.
-  - Set `detect_path` for detection CSV files.
-  - Set `anomaly_path` for anomaly CSV files.
-  - Set merged output folders.
-  - Set split fractions, target column, history columns, and context columns.
+Keep raw data outside version control. The default locations are `data/` for inputs and `output/` for generated artifacts.
 
-## Usage
-Below are examples but do refer into each README for more information.
+## Running the workflow
 
-Run image analysis:
+Run image analysis from its module root:
 
 ```bash
 cd image_analysis_app
 python -m scripts.pipeline.main
 ```
 
-Run predictive preprocessing:
+Prepare aligned predictive-modeling datasets:
 
 ```bash
 cd predictive_modeling
 python scripts/preprocessing/preprocessing.py
 ```
 
-Run model training examples:
+Train representative models:
 
 ```bash
-cd predictive_modeling
 python scripts/model_training/statistical/arx.py
 python scripts/model_training/statistical/narx2.py
 python scripts/model_training/dl/nn_narx.py
-python scripts/model_training/ml/parallel_ensemble.py
+python scripts/model_training/dl/lstm.py
 python scripts/model_training/ml/xgb.py
+python scripts/model_training/ml/parallel_ensemble.py
 ```
 
-Run analysis utilities:
+Useful analysis commands:
 
 ```bash
-cd predictive_modeling
-python scripts/utils/correlation.py --input-dir data/merged_clipped --output-dir output/correlation
-python scripts/utils/plot.py
+python scripts/utils/correlation.py
+python scripts/utils/rrse.py path/to/predictions.csv
 ```
 
-## Inputs
-
-Image-analysis inputs:
-
-- `.avi` videos.
-- Frame folders with `.jpg`, `.jpeg`, or `.png` files.
-- Folder names containing `backlit` or `laserlit` for automatic mode selection.
-
-Predictive-modeling inputs:
-
-- HDF5 measurement files in the configured `h5_input_path`.
-- Detection CSV files from `output/detect/csv`.
-- Anomaly CSV files from `output/anomaly/csv`.
-- Merged training CSV files in `predictive_modeling/data/merged_clipped` or `predictive_modeling/data/merged_clipped_norm`.
-
-Common columns used by predictive models:
-
-- `voltage`
-- `current`
-- `delta_voltage`
-- `delta_current`
-- `wfs`
-- `ctdw`
-- `wiretip_to_weldpool_dist`
-- `tapering_to_weldpool_dist`
+Most scripts expose `--help` for path and model-specific options. Run commands from the module directory shown above so package imports resolve correctly.
 
 ## Outputs
 
-Image-analysis outputs:
+Typical outputs are written below `output/` and `predictive_modeling/data/`:
 
-- `output/detect/csv`
-- `output/detect/images`
-- `output/track/csv`
-- `output/track/images`
-- `output/track/trajectory_plots`
-- `output/track/velocity_plots`
-- `output/anomaly/csv`
-- `output/anomaly/images`
+- detection and tracking CSV files;
+- anomaly flags and optional annotated frames;
+- converted and aligned measurement datasets;
+- raw, clipped, and normalized dataset variants;
+- model predictions, metrics, split manifests, plots, and feature importances.
 
-Predictive-modeling outputs:
+## Scope and reproducibility
 
-- `output/measurements`, converted measurement CSV files.
-- `predictive_modeling/data/merged_org`, merged raw feature CSV files.
-- `predictive_modeling/data/merged_clipped`, clipped feature CSV files.
-- `predictive_modeling/data/merged_clipped_norm`, normalized feature CSV files.
-- `predictive_modeling/output`, local model outputs from some scripts.
-- `output/predictive_modelling`, evaluation plots and model summary files.
+This repository contains the thesis implementation and configuration, not the complete experimental data package. Results depend on the unavailable source videos, HDF5 measurements, acquisition setup, and tuned configuration values. The report provides the scientific context, methodology, experiments, and conclusions.
 
-Model output files include:
+The public snapshot currently references additional `image_analysis_app/scripts/droplets_spatters` modules that are not included in this archive. Restore those modules from the original working copy before running the full image-analysis pipeline.
 
-- prediction CSV files.
-- metrics JSON or CSV files.
-- split manifests.
-- grid-search logs.
-- feature-importance CSV and PNG files.
-- training-history CSV and PNG files.
+## Authors and acknowledgements
 
-## Methodology
-
-1. Capture welding videos and process measurements for the same experiments.
-2. Extract image features from each frame.
-3. Track transient objects across frames.
-4. Flag unreliable frames with anomaly rules.
-5. Convert HDF5 measurement data to CSV.
-6. Align measurement samples with frame-level image features.
-7. Repair short anomaly gaps through interpolation.
-8. Build merged datasets with raw, clipped, and normalized variants.
-9. Split data into train, validation, and test sets by sequence.
-10. Train statistical, machine-learning, and deep-learning models.
-11. Compare models with RMSE, MAE, R2, fit percentage, and prediction plots.
-
-## Examples
-
-Preprocess data with configured paths:
-
-```bash
-cd predictive_modeling
-python scripts/preprocessing/preprocessing.py
-```
-
-Preprocess with custom merged output folders:
-
-```bash
-cd predictive_modeling
-python scripts/preprocessing/preprocessing.py \
-  --output-path-org data/merged_org \
-  --output-path-clipped data/merged_clipped \
-  --output-path-clipped-norm data/merged_clipped_norm
-```
-
-Train ARX with a custom output folder:
-
-```bash
-cd predictive_modeling
-python scripts/model_training/statistical/arx.py --output_dir output/arx/wiretip_to_weldpool
-```
-
-Create correlation plots:
-
-```bash
-cd predictive_modeling
-python scripts/utils/correlation.py \
-  --input-dir data/merged_clipped \
-  --output-dir output/correlation
-```
-
-## Authors
-
-- Dharun
+- Dharun Kumar
 - Samuel
 
-## Acknowledgement
+Developed with support from the ESAB Process Control R&D team, whose guidance, domain knowledge, and data access enabled the project.
 
-Thanks to the ESAB Process Control R&D team for guidance, domain knowledge, data access, and project support.
+## Citation
+
+If you use this code, cite the thesis report linked above and reference this repository:
+
+```text
+Dharun Kumar and Samuel. Welding Process Monitoring: Master’s Thesis Code.
+https://github.com/Dharun235/welding-process-monitoring
+```
+
+## License and data
+
+No open-source license is asserted for the current snapshot. Experimental data and company-sensitive materials are not included. Contact the authors before reusing the code or requesting data access.

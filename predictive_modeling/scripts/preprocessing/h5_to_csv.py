@@ -3,8 +3,9 @@ from pathlib import Path
 import h5py
 import pandas as pd
  
-DEFAULT_H5_INPUT_DIR = Path("/mnt/e/thesis/Large_timeseries_and_video/we_5m_20mm.h5")
-DEFAULT_CSV_OUTPUT_DIR = Path("/home/samuel/Master-Thesis-ESAB/output/measurements")
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+DEFAULT_H5_INPUT_DIR = PROJECT_ROOT / "data" / "backlit" / "to_be_processed"
+DEFAULT_CSV_OUTPUT_DIR = PROJECT_ROOT / "output" / "measurements"
  
  
 def flatten_h5_to_dict(h5_file: h5py.File) -> dict[str, object]:

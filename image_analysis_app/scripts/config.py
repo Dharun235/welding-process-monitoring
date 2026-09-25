@@ -9,6 +9,9 @@ import numpy as np
 
 CONFIG = {
 
+    # Repository-relative defaults keep the pipeline portable across machines.
+    "project_root": str(Path(__file__).resolve().parents[2]),
+
     # Quick edit guide:
     # 1) Set input_root (folder containing AVI files and/or frame folders)
     # 2) Set output_root
@@ -18,8 +21,8 @@ CONFIG = {
     # ================================
     # INPUT / OUTPUT (EDIT THIS BLOCK)
     # ================================
-    "input_root": "/home/samuel/Master-Thesis-ESAB/data",
-    "output_root": "/home/samuel/Master-Thesis-ESAB/output",
+    "input_root": str(Path(__file__).resolve().parents[2] / "data"),
+    "output_root": str(Path(__file__).resolve().parents[2] / "output"),
 
     # ================================
     # CURRENT RUN SETTINGS (EDIT THIS BLOCK)
@@ -30,13 +33,13 @@ CONFIG = {
         "end_img": None,
 
         # Set to None for automatic detection, set to "backlit" or "laserlit" to override
-        "video_mode": "backlit",
+        "video_mode": None,
 
         # Output/visualization toggles
         "save_csv": True,
-        "save_detect_images_debug": True,
-        "save_track_images_debug": True,
-        "save_anomaly_frames": True, # Set detect images debug to True for this to have effect.
+        "save_detect_images_debug": False,
+        "save_track_images_debug": False,
+        "save_anomaly_frames": False,
     },
 
     # General parameters

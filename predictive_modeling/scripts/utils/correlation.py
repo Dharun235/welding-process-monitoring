@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
 import matplotlib
@@ -11,8 +12,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-DEFAULT_INPUT_DIR = Path("/home/samuel/Master-Thesis-ESAB/predictive_modeling/data/merged_clipped")
-DEFAULT_OUTPUT_DIR = Path("/home/samuel/Master-Thesis-ESAB/predictive_modeling/output/correlation")
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from predictive_modeling.scripts.config import CONFIG
+
+DEFAULT_INPUT_DIR = Path(CONFIG["preprocessing"]["output_path_clipped"])
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "output" / "predictive_modeling" / "correlation"
 DEFAULT_RANDOM_STATE = 42
 DEFAULT_DPI = 300
 DEFAULT_MAX_LAG = 50

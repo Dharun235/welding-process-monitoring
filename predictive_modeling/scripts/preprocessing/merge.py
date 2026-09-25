@@ -11,12 +11,14 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from scripts.config import CONFIG
 from scripts.preprocessing.interpolate_anomalies import interpolate_anomalies_df
 
-DEFAULT_INPUT_CSV_DIR = "/home/samuel/Master-Thesis-ESAB/output/measurements"
-DEFAULT_DETECTION_CSV_DIR = "/home/samuel/Master-Thesis-ESAB/output/detect/csv"
-DEFAULT_ANOMALY_CSV_DIR = "/home/samuel/Master-Thesis-ESAB/output/anomaly/csv"
-DEFAULT_OUTPUT_DIR = "/home/samuel/Master-Thesis-ESAB/predictive_modeling/data"
+PREPROCESSING_CONFIG = CONFIG["preprocessing"]
+DEFAULT_INPUT_CSV_DIR = PREPROCESSING_CONFIG["input_path"]
+DEFAULT_DETECTION_CSV_DIR = PREPROCESSING_CONFIG["detect_path"]
+DEFAULT_ANOMALY_CSV_DIR = PREPROCESSING_CONFIG["anomaly_path"]
+DEFAULT_OUTPUT_DIR = PREPROCESSING_CONFIG["output_path_org"]
 
 CURRENT_SOURCE_COLUMNS = ["Math/IIR_filter_1_AI_4_Current_Filter_2/1", "Math/IIR_filter_1_AI_7_Current_Filter_2/1"]
 CURRENT_TIME_COLUMNS = ["Math/IIR_filter_1_AI_4_Current_Filter_2/0", "Math/IIR_filter_1_AI_7_Current_Filter_2/0"]

@@ -24,8 +24,9 @@ from scripts.preprocessing.split import SequenceData, split_data_folder
 
 
 cfg = CONFIG["preprocessing"]["split"]
-DATA_FOLDER = Path("/home/dharun/Master-Thesis-ESAB/data/Thesis/training_csvs/diff_downsampled")
-OUT_ROOT = Path("/home/dharun/Master-Thesis-ESAB/output/predictive_modelling/results/lstm_outputs_sweep_additional_features_without_ctdw")
+PROJECT_ROOT = PACKAGE_ROOT.parent
+DATA_FOLDER = Path(CONFIG["preprocessing"]["output_path_clipped"])
+OUT_ROOT = PROJECT_ROOT / "output" / "predictive_modeling" / "lstm"
 OUT_ROOT.mkdir(parents=True, exist_ok=True)
 
 TARGETS = list(dict.fromkeys(cfg.get("target_cols", [cfg["target_col"]])))
@@ -433,9 +434,7 @@ def train_for_window(window_size: int, split: object, out_dir: Path) -> dict:
 
 
 def main() -> None:
-    thesis_manifest_path = Path(
-        "/home/dharun/Master-Thesis-ESAB/data/Thesis/result_csvs/split_manifest.csv"
-    )
+    thesis_manifest_path = DATA_FOLDER / "split_manifest.csv"
 
     print(f"Source folder: {DATA_FOLDER}")
     print(f"Manifest path: {thesis_manifest_path}")

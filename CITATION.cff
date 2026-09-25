@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: "Welding Process Monitoring"
+message: "If you use this repository, please cite the thesis report and this software repository."
+type: software
+authors:
+  - family-names: Kumar
+    given-names: Dharun
+  - family-names: Samuel
+repository-code: "https://github.com/Dharun235/welding-process-monitoring"
+url: "https://github.com/Dharun235/dharun.github.io/blob/main/MasterThesisReport.pdf"
