@@ -14,6 +14,7 @@ The project combines computer-vision feature extraction with time-series modelin
 ```text
 .
 ├── image_analysis_app/       # Frame-level detection, tracking, and anomaly scoring
+│   └── scripts/droplets_spatters/  # Droplet/spatter detection and tracking
 ├── predictive_modeling/      # Measurement conversion, feature alignment, and models
 ├── requirements.txt          # Python dependencies
 └── README.md
