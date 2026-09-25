@@ -37,4 +37,4 @@ anomaly/{csv,images}/
 
 ESAB source data is intentionally not included in this repository. The full research workflow and access limitations are documented in the [root README](../README.md).
 
-> Note: the supplied archive references `scripts/droplets_spatters`, but that package is not present in the archive or repository history. Restore the original ESAB-authorized package before running the end-to-end pipeline.
+Droplet/spatter detection and tracking are implemented in `scripts/droplets_spatters/`.
