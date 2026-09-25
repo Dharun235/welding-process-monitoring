@@ -1,0 +1,31 @@
+# Project data/artifacts
+data/
+output/
+outdated/
+tests/
+
+
+# Python cache/build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest*
+
+# Virtual environment
+.venv/
+
+# OS / editor noise only
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Conda installer scripts
+Miniconda3-latest-Linux-x86_64.sh
+Miniconda3-latest-Linux-x86_64.sh.1
+
+# AI model descriptions
+claude.md
+.claudeignore
+.codex
+codex.md
+.agents
