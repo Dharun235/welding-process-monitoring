@@ -1,3 +1,5 @@
+"""Create sequence-aware train, validation, and test dataset partitions."""
+
 from __future__ import annotations
 
 import math
@@ -21,6 +23,7 @@ __all__ = ["DatasetSplit", "SequenceData", "split_data_folder"]
 
 @dataclass(frozen=True)
 class SequenceData:
+    """One source CSV and its assigned split role."""
     file_name: str
     split_role: str
     df: pd.DataFrame
@@ -39,6 +42,7 @@ class SequenceData:
 
 @dataclass(frozen=True)
 class DatasetSplit:
+    """Container for split sequences and the assignment manifest."""
     train: list[SequenceData]
     validation: list[SequenceData]
     test: list[SequenceData]
@@ -54,6 +58,7 @@ def split_data_folder(
     ctdw: int | float | None = None,
     config: dict[str, Any] | None = None,
 ) -> DatasetSplit:
+    """Load CSV sequences and assign them to train, validation, and test sets."""
     split_config = dict(DEFAULT_SPLIT_CONFIG)
     if config:
         split_config.update(config)

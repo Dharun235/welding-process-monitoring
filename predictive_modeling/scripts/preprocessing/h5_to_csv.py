@@ -1,3 +1,5 @@
+"""Convert HDF5 measurement datasets into tabular CSV files."""
+
 from pathlib import Path
  
 import h5py
@@ -9,6 +11,7 @@ DEFAULT_CSV_OUTPUT_DIR = PROJECT_ROOT / "output" / "measurements"
  
  
 def flatten_h5_to_dict(h5_file: h5py.File) -> dict[str, object]:
+    """Flatten one HDF5 file's datasets into column names and array values."""
     data_dict: dict[str, object] = {}
  
     def extract(name: str, obj: h5py.Dataset) -> None:
@@ -31,6 +34,7 @@ def convert_h5_folder_to_csv(
     h5_folder_path: str | Path = DEFAULT_H5_INPUT_DIR,
     csv_output_folder: str | Path = DEFAULT_CSV_OUTPUT_DIR,
 ) -> list[Path]:
+    """Convert one HDF5 file or all HDF5 files in a folder to CSV."""
     h5_folder = Path(h5_folder_path)
     csv_output = Path(csv_output_folder)
     csv_output.mkdir(parents=True, exist_ok=True)

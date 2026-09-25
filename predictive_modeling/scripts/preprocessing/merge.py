@@ -1,3 +1,5 @@
+"""Align process measurements with image features and export training tables."""
+
 import argparse
 import re
 import sys

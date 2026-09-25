@@ -1,3 +1,5 @@
+"""Estimate the solid-to-molten wire transition in a welding frame."""
+
 import cv2
 import numpy as np
 
@@ -53,4 +55,3 @@ def solid_molten_transition(
             transition_point = (x_at_max_y, int(max_y))
 
     return transition_point
-

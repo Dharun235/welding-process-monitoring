@@ -1,3 +1,5 @@
+"""Repair short, flagged gaps in selected numeric image features."""
+
 from pathlib import Path
 
 import pandas as pd

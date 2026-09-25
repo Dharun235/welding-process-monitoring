@@ -1,3 +1,5 @@
+"""Generate exploratory correlation and lagged scatter plots."""
+
 from __future__ import annotations
 
 import argparse

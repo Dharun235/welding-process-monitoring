@@ -1,3 +1,5 @@
+"""Repository-relative defaults for predictive preparation and modeling."""
+
 from pathlib import Path
 
 

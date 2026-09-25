@@ -1,3 +1,5 @@
+"""Train and compare LSTM regressors over configurable sequence windows."""
+
 from __future__ import annotations
 
 import json
@@ -70,6 +72,7 @@ print(f"window sizes: {WINDOW_SIZES}")
 
 
 class LSTMRegressor(nn.Module):
+    """Bidirectional LSTM regressor with normalized sequence inputs."""
     def __init__(self, input_size: int, output_size: int):
         super().__init__()
         self.input_norm = nn.LayerNorm(input_size)

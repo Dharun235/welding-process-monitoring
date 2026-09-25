@@ -1,3 +1,5 @@
+"""Train neural NARX models for sequence-based process prediction."""
+
 from __future__ import annotations
 
 import argparse
@@ -42,6 +44,7 @@ ARC_VOLTAGE_THRESHOLD = 1.0e-6
 
 @dataclass(frozen=True)
 class RolloutSequence:
+    """Represent one sequence used during neural NARX rollout training."""
     file_name: str
     inputs: np.ndarray
     y: np.ndarray

@@ -1,7 +1,10 @@
+"""Count physical lines in a CSV without loading it into memory."""
+
 import sys
 
 
 def count_lines(path: str, chunk_size: int = 8 * 1024 * 1024) -> int:
+    """Return the number of newline-delimited records in a file."""
     newline_count = 0
     last_byte = b""
 
@@ -17,6 +20,7 @@ def count_lines(path: str, chunk_size: int = 8 * 1024 * 1024) -> int:
 
 
 def main() -> None:
+    """Run the line counter from the command line."""
     if len(sys.argv) != 2:
         raise SystemExit(f"Usage: {sys.argv[0]} <csv_path>")
 

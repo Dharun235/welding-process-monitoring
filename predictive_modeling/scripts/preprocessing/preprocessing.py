@@ -1,3 +1,5 @@
+"""Run HDF5 conversion and image-feature/measurement preparation."""
+
 import argparse
 import sys
 from pathlib import Path

@@ -1,3 +1,5 @@
+"""Plot prediction files and summarize model performance across windows."""
+
 import os
 from pathlib import Path
 

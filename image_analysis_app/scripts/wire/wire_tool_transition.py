@@ -1,3 +1,5 @@
+"""Locate wire/tool transition points along offset scan lines."""
+
 import numpy as np
 
 

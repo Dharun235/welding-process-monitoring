@@ -1,3 +1,5 @@
+"""Select candidate contours representing the welding wire."""
+
 import cv2
 import numpy as np
 

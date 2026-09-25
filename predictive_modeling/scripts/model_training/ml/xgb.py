@@ -1,3 +1,5 @@
+"""Train XGBoost regressors over configurable temporal windows."""
+
 from __future__ import annotations
 
 import json

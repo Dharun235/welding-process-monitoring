@@ -1,3 +1,5 @@
+"""Image preprocessing helpers used before welding-feature detection."""
+
 import cv2
 import numpy as np
 

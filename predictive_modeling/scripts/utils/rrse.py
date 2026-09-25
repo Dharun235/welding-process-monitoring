@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 
 def load_prediction_values(file_path, pred_col, true_col):
+    """Load finite target/prediction pairs from a CSV file."""
     df = pd.read_csv(file_path, usecols=[true_col, pred_col])
     values = df[[true_col, pred_col]].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float)
     valid_mask = np.isfinite(values).all(axis=1)
@@ -17,6 +18,7 @@ def load_prediction_values(file_path, pred_col, true_col):
 
 
 def rrse(file_path, pred_col, true_col):
+    """Calculate root relative squared error for a prediction CSV."""
     y_true, y_pred = load_prediction_values(file_path, pred_col, true_col)
     squared_error = np.sum((y_true - y_pred) ** 2)
     squared_deviation = np.sum((y_true - np.mean(y_true)) ** 2)
@@ -26,6 +28,7 @@ def rrse(file_path, pred_col, true_col):
 
 
 def pearson_correlation(file_path, pred_col, true_col):
+    """Calculate Pearson correlation, or NaN for constant inputs."""
     y_true, y_pred = load_prediction_values(file_path, pred_col, true_col)
     if len(y_true) < 2 or np.std(y_true) == 0 or np.std(y_pred) == 0:
         return np.nan

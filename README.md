@@ -63,6 +63,7 @@ Defaults are repository-relative. Edit only the relevant configuration file befo
 
 - `image_analysis_app/scripts/config.py` — input/output roots, frame range, acquisition mode, detector thresholds, and debug output.
 - `predictive_modeling/scripts/config.py` — measurement/detection paths, interpolation, target/features, and sequence splitting.
+- [`CODE_GUIDELINES.md`](CODE_GUIDELINES.md) — conventions for research code and reproducible changes.
 
 Keep raw data outside version control. The default locations are `data/` for inputs and `output/` for generated artifacts.
 

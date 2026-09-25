@@ -1,3 +1,5 @@
+"""Train parallel machine-learning candidates and select an ensemble."""
+
 from __future__ import annotations
 
 import json
@@ -153,6 +155,7 @@ def candidate_specs(config: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 class TwoStageDistanceEstimator(BaseEstimator, RegressorMixin):
+    """Estimator that separates zero-distance and positive-distance predictions."""
     def __init__(
         self,
         classifier: Any,
