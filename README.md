@@ -115,8 +115,6 @@ Typical outputs are written below `output/` and `predictive_modeling/data/`:
 
 This repository contains the thesis implementation and configuration, not the experimental data package. Results depend on ESAB source videos, HDF5 measurements, acquisition setup, and tuned configuration values. The thesis report provides the scientific context, methodology, experiments, and conclusions.
 
-The public snapshot references additional `image_analysis_app/scripts/droplets_spatters` modules that are not present in the supplied archive or repository history. The full image-analysis pipeline therefore requires those original modules to be restored from the ESAB-authorized working copy.
-
 ## Authors and acknowledgements
 
 - Dharun Kumar
