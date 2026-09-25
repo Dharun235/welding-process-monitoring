@@ -45,4 +45,4 @@ Important configured signals include voltage, current, wire-feed speed, contact-
 - `data/merged_clipped_norm/` — normalized data;
 - `output/predictive_modeling/` — model metrics, predictions, plots, manifests, and feature importance.
 
-See the [root README](../README.md) for the research context, reproducibility boundary, and thesis report.
+ESAB process data is not included. See the [root README](../README.md) for research context, access restrictions, and the thesis report.

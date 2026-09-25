@@ -19,7 +19,7 @@ The project combines computer-vision feature extraction with time-series modelin
 └── README.md
 ```
 
-Generated data, model outputs, videos, and images are intentionally excluded from this repository. The experimental data used in the thesis is not redistributed here.
+ESAB experimental data, production images, and process measurements are intentionally excluded from this repository and are not reproduced in this README. The linked thesis report contains the authorized research context, analysis, and results.
 
 ## Research workflow
 
@@ -113,9 +113,9 @@ Typical outputs are written below `output/` and `predictive_modeling/data/`:
 
 ## Scope and reproducibility
 
-This repository contains the thesis implementation and configuration, not the complete experimental data package. Results depend on the unavailable source videos, HDF5 measurements, acquisition setup, and tuned configuration values. The report provides the scientific context, methodology, experiments, and conclusions.
+This repository contains the thesis implementation and configuration, not the experimental data package. Results depend on ESAB source videos, HDF5 measurements, acquisition setup, and tuned configuration values. The thesis report provides the scientific context, methodology, experiments, and conclusions.
 
-The public snapshot currently references additional `image_analysis_app/scripts/droplets_spatters` modules that are not included in this archive. Restore those modules from the original working copy before running the full image-analysis pipeline.
+The public snapshot references additional `image_analysis_app/scripts/droplets_spatters` modules that are not present in the supplied archive or repository history. The full image-analysis pipeline therefore requires those original modules to be restored from the ESAB-authorized working copy.
 
 ## Authors and acknowledgements
 
@@ -133,6 +133,6 @@ Dharun Kumar and Samuel. Welding Process Monitoring: Master’s Thesis Code.
 https://github.com/Dharun235/welding-process-monitoring
 ```
 
-## License and data
+## Use and access
 
-No open-source license is asserted for the current snapshot. Experimental data and company-sensitive materials are not included. Contact the authors before reusing the code or requesting data access.
+This repository is published for portfolio and employer review only. It is not an open-source release. All code, documentation, and related materials are proprietary and may not be copied, modified, redistributed, published, or used without written permission from the rights holders. See [LICENSE](LICENSE). ESAB data and company-sensitive materials remain restricted.
